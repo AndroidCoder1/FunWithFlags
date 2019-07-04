@@ -1,6 +1,8 @@
 package lisa.owusu.tellmeaboutmycountry.models
 
-class Currency {
+import java.io.Serializable
+
+class Currency : Serializable {
 
     var name = ""
     var symbol = ""

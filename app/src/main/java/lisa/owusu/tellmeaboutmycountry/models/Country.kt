@@ -1,6 +1,8 @@
 package lisa.owusu.tellmeaboutmycountry.models
 
-class Country {
+import java.io.Serializable
+
+class Country : Serializable {
 
     var name = ""
     var callingCodes = {}
