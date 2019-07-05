@@ -42,6 +42,9 @@ class Country {
     @SerializedName("flag")
     var flag : String? = null
 
+    @SerializedName("demonym")
+    var demonym : String? = null
+
 
 
 
@@ -69,7 +72,7 @@ class Country {
      * @return the customised description .
      */
     override fun toString(): String {
-        return "Country(name=$name, callingCodes=$callingCodes, capital=$capital, latlng=$latlng, timezones=$timezones, borders=$borders, currencies=$currencies, languages=$languages, flag=$flag)"
+        return "Country(name=$name, callingCodes=$callingCodes, capital=$capital, latlng=$latlng, timezones=$timezones, borders=$borders, currencies=$currencies, languages=$languages, flag=$flag, demonym=$demonym)"
     }
 }
 
