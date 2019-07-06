@@ -19,7 +19,7 @@ class RetrofitClientInstance {
     companion object {
 
         private var retrofit: Retrofit? = null
-        private val BASE_URL = "https://restcountries.eu"
+        private const val BASE_URL = "https://restcountries.eu"
 
         /**
          * Creating Retrofit Instance.. Method checks to see if retrofit instance is null.

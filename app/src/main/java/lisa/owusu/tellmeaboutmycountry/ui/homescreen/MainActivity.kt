@@ -1,8 +1,8 @@
-package lisa.owusu.tellmeaboutmycountry
+package lisa.owusu.tellmeaboutmycountry.ui.homescreen
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import lisa.owusu.tellmeaboutmycountry.R
 import lisa.owusu.tellmeaboutmycountry.models.Country
 import lisa.owusu.tellmeaboutmycountry.utils.Requests
 import lisa.owusu.tellmeaboutmycountry.utils.RetrofitClientInstance
