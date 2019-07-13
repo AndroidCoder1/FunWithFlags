@@ -13,8 +13,8 @@ interface HomeInteractor {
     }
 
     fun getCountryFromURLRequest(name: String, listener: OnRequestFinishedListener)
-    fun getCountryFromLocalCache(name: String, listener: OnRequestFinishedListener)
+    fun getCountryFromLocalCache(name: String, context: Context, listener: OnRequestFinishedListener)
     fun makeAllCountriesRequest(listener: OnRequestFinishedListener)
-    fun saveCountries(countries: List<Country>, listener: OnRequestFinishedListener)
+    fun saveCountries(countries: List<Country>, context: Context, listener: OnRequestFinishedListener)
     fun checkForInternetConnectivity(context: Context) : Boolean
 }
