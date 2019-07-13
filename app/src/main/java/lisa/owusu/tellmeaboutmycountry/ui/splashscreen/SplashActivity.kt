@@ -7,10 +7,10 @@ import lisa.owusu.tellmeaboutmycountry.R
 import android.animation.Animator
 import android.content.Intent
 import android.view.MotionEvent
-import lisa.owusu.tellmeaboutmycountry.ui.homescreen.MainActivity
+import lisa.owusu.tellmeaboutmycountry.ui.homescreen.HomeActivity
 
 
-class SplashActivity : AppCompatActivity(),SplashView, Animator.AnimatorListener{
+class SplashActivity : AppCompatActivity(), SplashView, Animator.AnimatorListener{
 
     var lottieAvImage: LottieAnimationView? = null
     var presenter: SplashPresenter? = null
@@ -49,7 +49,7 @@ class SplashActivity : AppCompatActivity(),SplashView, Animator.AnimatorListener
     }
 
     override fun startHomeActivity() {
-        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
         finish()
     }
 }

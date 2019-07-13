@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools" package="lisa.owusu.tellmeaboutmycountry">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -24,8 +25,9 @@
         </activity>
 
         <activity
-                android:name=".ui.homescreen.MainActivity"
+                android:name=".ui.homescreen.HomeActivity"
                 android:launchMode="singleTask"
+                android:theme="@style/AppTheme.NoActionBar"
         />
 
     </application>
