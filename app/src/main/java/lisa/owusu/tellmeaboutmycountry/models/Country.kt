@@ -1,8 +1,6 @@
 package lisa.owusu.tellmeaboutmycountry.models
 
 import com.google.gson.annotations.SerializedName
-import java.lang.StringBuilder
-
 
 
 /**
@@ -23,6 +21,9 @@ class Country {
 
     @SerializedName("capital")
     var capital : String? = null
+
+    @SerializedName("alpha2Code")
+    var alpha2Code : String? = null
 
     @SerializedName("latlng")
     var latlng = ArrayList<Float>()
@@ -46,8 +47,6 @@ class Country {
     var demonym : String? = null
 
 
-
-
     companion object{
 
         /**
@@ -67,12 +66,24 @@ class Country {
         }
     }
 
+
+    /**
+     * The name will be shown in the adapter
+     * @return the name of Country .
+     */
+    override fun toString(): String {
+        if (name != null)
+            return name!!
+        return ""
+    }
+
+
     /**
      * The customised simplified description of parameters in the class
      * @return the customised description .
      */
-    override fun toString(): String {
-        return "Country(name=$name, callingCodes=$callingCodes, capital=$capital, latlng=$latlng, timezones=$timezones, borders=$borders, currencies=$currencies, languages=$languages, flag=$flag, demonym=$demonym)"
+    fun getString(): String {
+        return "Country(name=$name, callingCodes=$callingCodes, capital=$capital, latlng=$latlng, timezones=$timezones, borders=$borders, currencies=$currencies, languages=$languages, flag=$flag, alpha2Code=$alpha2Code, demonym=$demonym)"
     }
 }
 

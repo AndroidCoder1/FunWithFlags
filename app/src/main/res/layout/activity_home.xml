@@ -39,8 +39,8 @@
 
       <ImageView
               android:id="@+id/iv_country_flag"
-              android:layout_width="200dp"
-              android:layout_height="160dp"
+              android:layout_width="230dp"
+              android:layout_height="100dp"
               android:layout_gravity="center|top"
               android:src="@mipmap/cam"
               android:contentDescription="@string/app_name"/>
@@ -52,6 +52,19 @@
               android:layout_marginTop="80dp"
               android:layout_gravity="center|top"
               android:id="@+id/progressBar"/>
+
+      <TextView
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="#011A33"
+              android:layout_gravity="center"
+              android:gravity="center"
+              android:textSize="@dimen/details_text_size"
+              android:layout_marginBottom="130dp"
+              android:text="Time\n23:14pm"
+              style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+              android:id="@+id/tv_time"/>
+
 
    </FrameLayout>
 
@@ -71,7 +84,8 @@
               android:orientation="horizontal"
               android:clickable="true"
               android:background="@drawable/header_background"
-              android:padding="14dp">
+              android:padding="14dp"
+              android:focusable="true">
 
          <TextView
                  android:id="@+id/tv_country_name"
@@ -80,7 +94,7 @@
                  android:layout_weight="1"
                  android:textColor="@color/textColor"
                  android:gravity="center"
-                 android:maxLines="1"
+                 android:maxLines="2"
                  android:ellipsize="end"
                  android:textSize="@dimen/large_text_size"
                  style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
@@ -137,7 +151,6 @@
                  android:id="@+id/tv_view_on_map"/>
 
          <TextView
-                 android:text="Currency: GHC"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:textColor="@color/white"
@@ -147,7 +160,6 @@
                  android:id="@+id/tv_currency"/>
 
          <TextView
-                 android:text="Language: English, French"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:textColor="@color/white"

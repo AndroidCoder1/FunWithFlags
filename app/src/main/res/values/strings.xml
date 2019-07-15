@@ -4,6 +4,12 @@
     <string name="error_loading_country_details">Error loading country details</string>
     <string name="enter_country_name">Enter Country Name</string>
     <string name="search">Search</string>
-    <string name="view_on_map">   View on Map</string>
+    <string name="view_on_map">\u0020\u0020View on Map</string>
     <string name="internet_connection_error">Internet Connectivity Error</string>
+    <string name="maps_not_found">Map Activity cannot be found</string>
+    <string name="timeFormat"><![CDATA[<small>Time in %s</small> <br />%s]]></string>
+    <string name="currencyFormat"><![CDATA[<small><b><font color=#FFFFFF>Currency:</font></b></small> &nbsp %s]]></string>
+    <string name="capitalFormat"><![CDATA[<small><b><font color=#FFFFFF>City:</font></b></small><pre>      %s</pre>]]></string>
+    <string name="callingCode"><![CDATA[&nbsp Calling Code:<pre>      %s</pre>]]></string>
+    <string name="languagesFormat"><![CDATA[<small><b><font color=#FFFFFF>Languages Spoken:</font></b></small> &nbsp %s]]></string>
 </resources>

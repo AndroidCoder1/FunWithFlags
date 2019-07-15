@@ -1,8 +1,13 @@
 package lisa.owusu.tellmeaboutmycountry.ui.homescreen
 
+import android.content.Context
+import lisa.owusu.tellmeaboutmycountry.models.Country
 
 interface HomePresenter {
 
-    fun startMapActivity()
-    fun onItemClicked(position: Int)
+    fun onItemClicked(country: Country?)
+
+    fun onNavigateToMapsClicked(country: Country?)
+
+    fun searchForCountryBasedOnQuery(query: String, context: Context)
 }

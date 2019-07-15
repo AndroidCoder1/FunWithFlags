@@ -1,44 +1,65 @@
 package lisa.owusu.tellmeaboutmycountry.ui.homescreen
 
-import android.animation.Animator
 import android.content.Context
 import android.net.ConnectivityManager
-import androidx.core.content.ContextCompat.getSystemService
 import lisa.owusu.tellmeaboutmycountry.models.Country
 import lisa.owusu.tellmeaboutmycountry.utils.Cache
 import lisa.owusu.tellmeaboutmycountry.utils.Requests
 import lisa.owusu.tellmeaboutmycountry.utils.RetrofitClientInstance
-import lisa.owusu.tellmeaboutmycountry.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class HomeInteractorImpl : HomeInteractor {
 
-    override fun getCountryFromURLRequest(name: String, listener: HomeInteractor.OnRequestFinishedListener) {
+    override fun getCountryFromURLRequest(
+        name: String,
+        context: Context,
+        listener: HomeInteractor.OnRequestFinishedListener
+    ) {
 
         listener.onBeforeRequest()
+
+        if (!checkForInternetConnectivity(context)) {
+            listener.onError()
+            return
+        }
+
+        val cache = Cache.getInstance(context)
+
+        if (cache.getCountries.isNotEmpty()) {
+            getCountryFromLocalCache(name, context, listener)
+            return
+        }
 
         val service = RetrofitClientInstance.retrofitInstance()?.create(Requests::class.java)
 
         val call = service?.getCountry(name, Country.getMemberNames())
 
-        if(call == null){
-            listener.onNullResponse()
+        if (call != null && call.isExecuted) {
+
+            call.cancel()
+
+        } else {
+
+            if (call == null) {
+                listener.onNullResponse()
+            }
+            println(call?.request()?.url())
+
+            call?.enqueue(object : Callback<List<Country>> {
+
+                override fun onFailure(call: Call<List<Country>>, t: Throwable) {
+                    listener.onError()
+                }
+
+                override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
+                    println(response.body())
+                    //println(Utils.getTimeBasedOnTimeZone(response.body()?.get(0)?.timezones?.get(0)!!))
+                    listener.onRequestSuccess(response.body())
+                }
+            })
         }
-        println(call?.request()?.url())
-
-        call?.enqueue(object : Callback<List<Country>> {
-            override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-                listener.onError()
-            }
-
-            override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                println(response.body())
-                println(Utils.getTimeBasedOnTimeZone(response.body()?.get(0)?.timezones?.get(0)!!))
-                listener.onRequestSuccess(response.body())
-            }
-        })
     }
 
     override fun getCountryFromLocalCache(name: String, context: Context, listener: HomeInteractor.OnRequestFinishedListener) {
@@ -75,7 +96,6 @@ class HomeInteractorImpl : HomeInteractor {
 
             override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
                 println(response.body())
-                println(Utils.getTimeBasedOnTimeZone(response.body()?.get(0)?.timezones?.get(0)!!))
                 listener.onRequestSuccess(response.body())
             }
         })
@@ -96,5 +116,6 @@ class HomeInteractorImpl : HomeInteractor {
         }
         return isAvailable
     }
+
 
 }

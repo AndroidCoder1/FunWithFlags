@@ -18,12 +18,17 @@ class Currency{
     @SerializedName("symbol")
     var symbol : String? = null
 
+    @SerializedName("code")
+    var code : String? = null
+
 
     /**
      * The customised simplified description of parameters in the class
      * @return the customised description .
      */
     override fun toString(): String {
-        return "Currency(name=$name, symbol=$symbol)"
+        if(symbol == null)
+            return "$name ($code)"
+        return "$name ($symbol)"
     }
 }

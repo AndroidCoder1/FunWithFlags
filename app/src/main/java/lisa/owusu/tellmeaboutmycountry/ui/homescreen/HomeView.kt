@@ -1,12 +1,13 @@
 package lisa.owusu.tellmeaboutmycountry.ui.homescreen
 
+import android.app.Activity
 import lisa.owusu.tellmeaboutmycountry.models.Country
 
 interface HomeView {
 
     fun showProgress()
     fun hideProgress()
-    fun hideKeyboard()
+    fun hideKeyboard(activity: Activity)
     fun showOopsContainer()
     fun hideOopsContainer()
     fun showInternetConnectivityError()
@@ -16,6 +17,8 @@ interface HomeView {
     fun displayCountryDetails(country: Country?)
     fun expandBottomView()
     fun collapseBottomView()
-    fun setSearchViewAdapter(data: List<String>)
+    fun showToast(message: String)
+    fun setSearchViewAdapter(data: List<Country>?)
+    fun navigateToMaps(latLngString: String)
 
 }

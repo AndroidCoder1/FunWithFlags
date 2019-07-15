@@ -23,6 +23,6 @@ class Language {
      * @return the customised description .
      */
     override fun toString(): String {
-        return "Language(name=$name, nativeName=$nativeName)"
+        return "$name ($nativeName)"
     }
 }
