@@ -18,6 +18,11 @@ class HomePresenterImpl(homeView: HomeView, homeInteractor: HomeInteractor) : Ho
     override fun searchForCountryBasedOnQuery(query: String, context: Context) {
 
         homeInteractor?.getCountryFromURLRequest(query, context, object : HomeInteractor.OnRequestFinishedListener {
+            override fun onNetworkError() {
+                homeView?.changeErrorText("An error occurred...\nCheck internet and try again")
+                homeView?.showOopsContainer()
+            }
+
             override fun onError() {
                 homeView?.changeErrorText("An error occurred...\nPlease try again")
                 homeView?.showOopsContainer()
@@ -36,6 +41,8 @@ class HomePresenterImpl(homeView: HomeView, homeInteractor: HomeInteractor) : Ho
 
             override fun onBeforeRequest() {
                 homeView?.showProgress()
+                homeView?.hideOopsContainer()
+                homeView?.hideInternetConnectivityError()
             }
 
         })

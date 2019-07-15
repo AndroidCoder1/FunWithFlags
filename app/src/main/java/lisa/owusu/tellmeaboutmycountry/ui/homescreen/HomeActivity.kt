@@ -50,6 +50,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     private var presenter: HomePresenter? = null
     private var currentCountry: Country? = null
     private var countries: List<Country>? = null
+    private var dataAdapter: ArrayAdapter<Country>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +61,17 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
 
         setSupportActionBar(toolBar)
 
+        /**
+         *  Removes the shadow bottom border from the AppLayout for Lollipop OS and above,
+         *  Its hidden for devices  below Lollipop
+         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout?.outlineProvider = null
         }
+
+        /**
+         * Trying to hide the keyboard when the app is created
+         */
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
         presenter = HomePresenterImpl(this, HomeInteractorImpl())
@@ -86,7 +95,11 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
 
 
         textViewViewOnMap?.setOnClickListener(this)
+        bottomViewLayout?.setOnClickListener(this)
 
+        /**
+         * Clearing all Default Text and Images in the layout
+         */
         resetScreen()
     }
 
@@ -98,6 +111,12 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         val searchMenu = menu.findItem(R.id.action_search)
         searchView = searchMenu?.actionView as SearchView
         searchView?.queryHint = "Search for Country"
+
+        /**
+         * Expanding the SearchView field to make query hint visible
+         * There is no indicator on the screen to show a user where to search
+         * country from... Hence the decision to expand it
+         */
         searchView?.onActionViewExpanded()
         searchView?.setIconifiedByDefault(false)
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -109,17 +128,26 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
             }
 
             override fun onQueryTextChange(s: String): Boolean {
-                if(s.isNotEmpty())
+                /**
+                 * Clearing filter message when text is changed to prevent user from
+                 * selecting a country from drop down when the internet connection goes down
+                 * The flag won't be loaded in that case
+                 */
+                dataAdapter?.filter?.filter(null)
+
+                if (s.length > 1)
                     presenter?.searchForCountryBasedOnQuery(s, this@HomeActivity)
                 else resetScreen()
                 return false
             }
         })
 
-
+        /**
+         * Accessing the AutoComplete widget from the SearchView widget
+         */
         searchAutoComplete = searchView?.findViewById(androidx.appcompat.R.id.search_src_text)
-        //searchAutoComplete?.threshold = 3
         searchAutoComplete?.onItemClickListener = this
+
         return true
     }
 
@@ -141,6 +169,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     }
 
     override fun showOopsContainer() {
+        resetScreen()
         changeErrorText(getString(R.string.error_loading_country_details))
         oopsLayout?.visibility = View.VISIBLE
     }
@@ -150,6 +179,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     }
 
     override fun showInternetConnectivityError() {
+        resetScreen()
         changeErrorText(getString(R.string.internet_connection_error))
         oopsLayout?.visibility = View.VISIBLE
     }
@@ -160,6 +190,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
 
     override fun resetScreen() {
         hideProgress()
+        hideOopsContainer()
         collapseBottomView()
         hideKeyboard(this@HomeActivity)
         hideOopsContainer()
@@ -170,17 +201,19 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         textViewCapital?.text= ""
         textViewLanguage?.text = ""
         textViewTime?.text = ""
-        imageViewFlag?.setImageResource(0)
+        imageViewFlag?.visibility = View.GONE
 
     }
 
     override fun displayCountryDetails(country: Country?) {
+
         currentCountry = country
         expandBottomView()
         hideKeyboard(this@HomeActivity)
         hideOopsContainer()
         hideInternetConnectivityError()
 
+        imageViewFlag?.visibility = View.VISIBLE
         val imageUrl = String.format(Constants.IMAGE_BASE_URL, country?.alpha2Code?.toLowerCase())
         Picasso.get().load(imageUrl).into(imageViewFlag)
         textViewCapital?.text= Utils.fromHtml(getString(R.string.capitalFormat, country?.capital))
@@ -213,22 +246,11 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     override fun setSearchViewAdapter(data: List<Country>?) {
         countries = data
         println("in set search adapter>>>${data.toString()}")
-        val dataAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, data)
-        searchAutoComplete?.setOnClickListener {
-            if(data != null){
-                if (data.count() > 0) {
-                    // show all suggestions
-                    if (searchAutoComplete?.text.toString() != ""){
-                        dataAdapter.filter.filter(null)
-                        searchAutoComplete?.showDropDown()
-                    }
-                }
-            }
-        }
-
+        dataAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, data)
+        searchAutoComplete?.setOnClickListener(this)
         searchAutoComplete?.setAdapter(dataAdapter)
         searchAutoComplete?.showDropDown()
-        dataAdapter.notifyDataSetChanged()
+        dataAdapter?.notifyDataSetChanged()
     }
 
 
@@ -249,7 +271,22 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     }
 
     override fun onClick(v: View?) {
-        presenter?.onNavigateToMapsClicked(currentCountry)
+        when {
+            v?.id == R.id.contentLayout -> toggleBottomView()
+
+            v is SearchView.SearchAutoComplete -> {
+                if(countries != null){
+                    if (countries!!.count() > 0) {
+                        if (searchAutoComplete?.text.toString() != "") {
+                            dataAdapter?.filter?.filter(null)
+                            searchAutoComplete?.showDropDown()
+                        }
+                    }
+                }
+            }
+
+            else -> presenter?.onNavigateToMapsClicked(currentCountry)
+        }
     }
 
     override fun showToast(message: String) {
@@ -270,6 +307,22 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
             }
 
         })
+    }
 
+    override fun onBackPressed() {
+        if (sheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
+            hideKeyboard(this)
+            toggleBottomView()
+        } else
+            super.onBackPressed()
+
+    }
+
+    override fun toggleBottomView() {
+        if(sheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED){
+            collapseBottomView()
+        }else{
+            expandBottomView()
+        }
     }
 }

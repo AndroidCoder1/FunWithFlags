@@ -11,7 +11,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import lisa.owusu.tellmeaboutmycountry.models.Country
 
-
+/**
+ * Local Database for the app
+ */
 class Cache private constructor(context: Context) {
 
     private val sharedPreferences: SharedPreferences
@@ -25,6 +27,10 @@ class Cache private constructor(context: Context) {
 
 
 
+    /**
+     * Store countries in Local cache
+     * @param countries countries to be stored
+     */
     @Synchronized
     fun storeCountries(countries: List<Country>?) {
         if (countries != null) {
@@ -34,19 +40,27 @@ class Cache private constructor(context: Context) {
     }
 
 
+    /**
+     * Access stored countries in cache
+     */
     val getCountries: ArrayList<Country>
         get() {
             var countries = ArrayList<Country>()
 
             var type = object : TypeToken<ArrayList<Country>>() {}.type
-            if (!(sharedPreferences.getString(Constants.COUNTRIES, "").isEmpty()))
+            if (sharedPreferences.getString(Constants.COUNTRIES, "").isNotEmpty())
                 countries = gson.fromJson(sharedPreferences.getString(Constants.COUNTRIES, ""), type)
             return countries
         }
 
+
     companion object {
         var cache: Cache? = null
 
+        /**
+         * Instance of Cache
+         * @param context Activity Context
+         */
         fun getInstance(context: Context): Cache {
             if (cache == null) {
                 cache = Cache(context)

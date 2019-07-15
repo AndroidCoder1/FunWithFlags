@@ -1,12 +1,12 @@
 package lisa.owusu.tellmeaboutmycountry.ui.splashscreen
 
+import android.animation.Animator
+import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import lisa.owusu.tellmeaboutmycountry.R
-import android.animation.Animator
-import android.content.Intent
-import android.view.MotionEvent
 import lisa.owusu.tellmeaboutmycountry.ui.homescreen.HomeActivity
 
 
@@ -27,6 +27,10 @@ class SplashActivity : AppCompatActivity(), SplashView, Animator.AnimatorListene
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         super.onTouchEvent(event)
+
+        /**
+         * End Animation and start next activity if screen is touched
+         */
         presenter?.onUserTouchScreen()
         return true
     }

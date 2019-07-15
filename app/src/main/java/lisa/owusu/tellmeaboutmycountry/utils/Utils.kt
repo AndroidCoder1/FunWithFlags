@@ -8,19 +8,28 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-
+/**
+ * Utils class is a helper class with helper methods
+ */
 class Utils {
     companion object {
 
+        /**
+         * Method to get time in a country based on the country's timezone
+         * A country may have multiple timezones but for this purpose the 
+         * first one is used
+         * @param timezoneStr String of the timezone
+         */
         fun getTimeBasedOnTimeZone(timezoneStr: String?): String {
 
             println(Calendar.getInstance().timeZone.id)
 
+            val pattern = "EEE dd-MMM-yyyy hh:mm:ss a"
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
                 val zoneId = ZoneId.of(timezoneStr)
                 var zonedDateTime = ZonedDateTime.now(zoneId)
-                val formatter = DateTimeFormatter.ofPattern("EEE dd-MMM-yyyy hh:mm:ss a")
+                val formatter = DateTimeFormatter.ofPattern(pattern)
                 val formattedString = zonedDateTime.format(formatter)
                 formattedString
 
@@ -28,12 +37,16 @@ class Utils {
 
                 val zoneId = org.threeten.bp.ZoneId.of(timezoneStr)
                 var zonedDateTime = org.threeten.bp.ZonedDateTime.now(zoneId)
-                val formatter = org.threeten.bp.format.DateTimeFormatter.ofPattern("EEE dd-MMM-yyyy hh:mm:ss a")
+                val formatter = org.threeten.bp.format.DateTimeFormatter.ofPattern(pattern)
                 val formattedString = zonedDateTime.format(formatter)
                 formattedString
             }
         }
 
+        /**
+         * Method to generate readable message from a list
+         * @param list list of items
+         */
         fun generateStringsFromList(list: ArrayList<Any>?) : String{
             var generatedStrings = StringBuilder()
             if(list != null) {
@@ -48,6 +61,10 @@ class Utils {
             return generatedStrings.toString()
         }
 
+        /**
+         * Method to render html irrespective of the Build Version
+         * @param htmlString html string to be rendered
+         */
         fun fromHtml(htmlString: String) : Spanned{
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(htmlString, Html.FROM_HTML_MODE_LEGACY)

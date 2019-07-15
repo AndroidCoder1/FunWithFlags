@@ -1,8 +1,9 @@
 package lisa.owusu.tellmeaboutmycountry.utils
 
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.Retrofit
 import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -29,6 +30,8 @@ class RetrofitClientInstance {
          */
         fun retrofitInstance(): Retrofit? {
             val httpClient = OkHttpClient.Builder()
+                .readTimeout(20, TimeUnit.SECONDS)
+                .connectTimeout(20, TimeUnit.SECONDS)
             if (retrofit == null) {
                 retrofit = retrofit2.Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -38,6 +41,7 @@ class RetrofitClientInstance {
             }
             return retrofit
         }
+
     }
 
 }

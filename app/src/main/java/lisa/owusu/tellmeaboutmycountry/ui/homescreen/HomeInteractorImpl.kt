@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import lisa.owusu.tellmeaboutmycountry.models.Country
 import lisa.owusu.tellmeaboutmycountry.utils.Cache
+import lisa.owusu.tellmeaboutmycountry.utils.InternetCheck
 import lisa.owusu.tellmeaboutmycountry.utils.Requests
 import lisa.owusu.tellmeaboutmycountry.utils.RetrofitClientInstance
 import retrofit2.Call
@@ -11,6 +12,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class HomeInteractorImpl : HomeInteractor {
+
+    private var call: Call<List<Country>>? = null
 
     override fun getCountryFromURLRequest(
         name: String,
@@ -21,7 +24,7 @@ class HomeInteractorImpl : HomeInteractor {
         listener.onBeforeRequest()
 
         if (!checkForInternetConnectivity(context)) {
-            listener.onError()
+            listener.onNetworkError()
             return
         }
 
@@ -32,76 +35,121 @@ class HomeInteractorImpl : HomeInteractor {
             return
         }
 
-        val service = RetrofitClientInstance.retrofitInstance()?.create(Requests::class.java)
 
-        val call = service?.getCountry(name, Country.getMemberNames())
+        try {
+            InternetCheck(object : InternetCheck.Consumer {
 
-        if (call != null && call.isExecuted) {
+                override fun accept(internet: Boolean?) {
+                    if (internet == false) {
+                        listener.onNetworkError()
+                        return
+                    }
 
-            call.cancel()
+                    val service = RetrofitClientInstance.retrofitInstance()?.create(Requests::class.java)
 
-        } else {
+                    call = service?.getCountry(name, Country.getMemberNames())
 
-            if (call == null) {
-                listener.onNullResponse()
-            }
-            println(call?.request()?.url())
+                    if (call != null && call!!.isExecuted) {
 
-            call?.enqueue(object : Callback<List<Country>> {
+                        call?.cancel()
 
-                override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-                    listener.onError()
-                }
+                    } else {
 
-                override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                    println(response.body())
-                    //println(Utils.getTimeBasedOnTimeZone(response.body()?.get(0)?.timezones?.get(0)!!))
-                    listener.onRequestSuccess(response.body())
+                        println(call?.request()?.url())
+
+                        call?.enqueue(object : Callback<List<Country>> {
+
+                            override fun onFailure(call: Call<List<Country>>, t: Throwable) {
+                                listener.onError()
+                            }
+
+                            override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
+                                println(response.body())
+                                if (response.body() == null) {
+                                    listener.onNullResponse()
+                                    return
+                                }
+                                listener.onRequestSuccess(response.body())
+                            }
+                        })
+                    }
                 }
             })
+        } catch (e: Exception) {
+            listener.onError()
         }
     }
 
-    override fun getCountryFromLocalCache(name: String, context: Context, listener: HomeInteractor.OnRequestFinishedListener) {
+    override fun getCountryFromLocalCache(
+        name: String,
+        context: Context,
+        listener: HomeInteractor.OnRequestFinishedListener
+    ) {
         var countries = ArrayList<Country>()
         val cache = Cache.getInstance(context)
-        if(cache.getCountries == null){
+        if (cache.getCountries == null) {
             listener.onNullResponse()
             return
         }
-        for(country in cache.getCountries){
-            if(country.name?.startsWith(name, true)!!){
+        for (country in cache.getCountries) {
+            if (country.name?.startsWith(name, true)!!) {
                 countries.add(country)
             }
         }
         listener.onRequestSuccess(countries)
     }
 
-    override fun makeAllCountriesRequest(listener: HomeInteractor.OnRequestFinishedListener) {
+    override fun makeAllCountriesRequest(context: Context, listener: HomeInteractor.OnRequestFinishedListener) {
         listener.onBeforeRequest()
 
-        val service = RetrofitClientInstance.retrofitInstance()?.create(Requests::class.java)
-
-        val call = service?.getCountries(Country.getMemberNames())
-
-        if(call == null){
-            listener.onNullResponse()
+        if (!checkForInternetConnectivity(context)) {
+            listener.onNetworkError()
+            return
         }
-        println(call?.request()?.url())
 
-        call?.enqueue(object : Callback<List<Country>> {
-            override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-                listener.onError()
-            }
 
-            override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                println(response.body())
-                listener.onRequestSuccess(response.body())
-            }
-        })
+
+        try {
+            InternetCheck(object : InternetCheck.Consumer {
+
+                override fun accept(internet: Boolean?) {
+                    if (internet == false) {
+                        listener.onNetworkError()
+                        return
+                    }
+
+                    val service = RetrofitClientInstance.retrofitInstance()?.create(Requests::class.java)
+
+                    val call = service?.getCountries(Country.getMemberNames())
+
+                    if (call == null) {
+                        listener.onNullResponse()
+                    }
+                    println(call?.request()?.url())
+
+                    call?.enqueue(object : Callback<List<Country>> {
+                        override fun onFailure(call: Call<List<Country>>, t: Throwable) {
+                            listener.onError()
+                        }
+
+                        override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
+                            println(response.body())
+                            listener.onRequestSuccess(response.body())
+                        }
+                    })
+
+                }
+            })
+        } catch (e: Exception) {
+            listener.onError()
+        }
     }
 
-    override fun saveCountries(countries: List<Country>, context: Context, listener: HomeInteractor.OnRequestFinishedListener) {
+    override fun saveCountries(
+        countries: List<Country>,
+        context: Context,
+        listener: HomeInteractor.OnRequestFinishedListener
+    ) {
         val cache = Cache.getInstance(context)
         cache.storeCountries(countries)
     }
