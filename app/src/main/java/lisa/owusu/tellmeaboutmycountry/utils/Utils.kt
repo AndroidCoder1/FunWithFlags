@@ -1,5 +1,7 @@
 package lisa.owusu.tellmeaboutmycountry.utils
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
@@ -71,6 +73,21 @@ class Utils {
             } else {
                 Html.fromHtml(htmlString)
             }
+        }
+
+        /**
+         * Checks if Network hardware is turned on/off
+         * @param context current activity context
+         */
+        fun checkForInternetConnectivity(context: Context): Boolean {
+
+            val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = manager.activeNetworkInfo
+            var isAvailable = false
+            if (networkInfo != null && networkInfo.isConnected && networkInfo.isAvailable) {
+                isAvailable = true
+            }
+            return isAvailable
         }
 
     }

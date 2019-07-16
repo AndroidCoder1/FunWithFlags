@@ -1,6 +1,7 @@
 package lisa.owusu.tellmeaboutmycountry.ui.homescreen
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -24,6 +25,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.squareup.picasso.Picasso
 import lisa.owusu.tellmeaboutmycountry.R
 import lisa.owusu.tellmeaboutmycountry.models.Country
+import lisa.owusu.tellmeaboutmycountry.services.GetAllCountriesService
+import lisa.owusu.tellmeaboutmycountry.utils.Cache
 import lisa.owusu.tellmeaboutmycountry.utils.Constants
 import lisa.owusu.tellmeaboutmycountry.utils.Utils
 
@@ -229,6 +232,8 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
 
         val languages = Utils.generateStringsFromList(country.languages as ArrayList<Any>)
         textViewLanguage?.text = Utils.fromHtml(getString(R.string.languagesFormat, languages))
+
+        dataAdapter?.filter?.filter(null)
     }
 
     override fun changeErrorText(text: String) {
@@ -301,12 +306,8 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
 
     override fun onResume() {
         super.onResume()
-        searchAutoComplete?.post(object : Runnable{
-            override fun run() {
-                hideKeyboard(this@HomeActivity)
-            }
-
-        })
+        startGetAllCountriesService(this)
+        searchAutoComplete?.post { hideKeyboard(this@HomeActivity) }
     }
 
     override fun onBackPressed() {
@@ -323,6 +324,13 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
             collapseBottomView()
         }else{
             expandBottomView()
+        }
+    }
+
+    override fun startGetAllCountriesService(context: Context) {
+        if (Cache.getInstance(context).getCountries.isEmpty()) {
+            val intent = Intent(context, GetAllCountriesService::class.java)
+            context.startService(intent)
         }
     }
 }

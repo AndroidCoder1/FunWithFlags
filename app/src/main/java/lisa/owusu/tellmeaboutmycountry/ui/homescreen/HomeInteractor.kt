@@ -74,9 +74,4 @@ interface HomeInteractor {
      */
     fun saveCountries(countries: List<Country>, context: Context, listener: OnRequestFinishedListener)
 
-    /**
-     * Checks if Network hardware is turned on/off
-     * @param context current activity context
-     */
-    fun checkForInternetConnectivity(context: Context) : Boolean
 }

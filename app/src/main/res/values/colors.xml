@@ -3,8 +3,9 @@
     <color name="colorPrimary">#ddd</color>
     <color name="colorPrimaryDark">@color/blue</color>
     <color name="colorAccent">#CDDC39</color>
-    <color name="blue">#3929E5</color>
+    <color name="blue">#0689C0</color>
     <color name="textColor">#C1C9F1</color>
     <color name="black">#333</color>
-    <color name="white">#9fff</color>
+    <color name="off_white">#9fff</color>
+    <color name="white">#fff</color>
 </resources>

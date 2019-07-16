@@ -1,7 +1,9 @@
 package lisa.owusu.tellmeaboutmycountry.ui.homescreen
 
 import android.app.Activity
+import android.content.Context
 import lisa.owusu.tellmeaboutmycountry.models.Country
+
 
 /**
  * Interface to show interactions to user
@@ -95,4 +97,9 @@ interface HomeView {
      */
     fun toggleBottomView()
 
+    /**
+     * Start Service to get all countries to save to cache
+     * @param context context of activity
+     */
+    fun startGetAllCountriesService(context: Context)
 }

@@ -10,7 +10,7 @@ import lisa.owusu.tellmeaboutmycountry.R
 import lisa.owusu.tellmeaboutmycountry.ui.homescreen.HomeActivity
 
 
-class SplashActivity : AppCompatActivity(), SplashView, Animator.AnimatorListener{
+class SplashActivity : AppCompatActivity(), SplashView, Animator.AnimatorListener {
 
     var lottieAvImage: LottieAnimationView? = null
     var presenter: SplashPresenter? = null

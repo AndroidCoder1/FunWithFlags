@@ -1,6 +1,6 @@
 package lisa.owusu.tellmeaboutmycountry.ui.splashscreen
 
-class SplashPresenterImpl(var splashView: SplashView) : SplashPresenter{
+class SplashPresenterImpl(var splashView: SplashView) : SplashPresenter {
 
     override fun onAnimationComplete() {
         splashView.startHomeActivity()

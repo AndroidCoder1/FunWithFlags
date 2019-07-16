@@ -1,12 +1,12 @@
 package lisa.owusu.tellmeaboutmycountry.ui.homescreen
 
 import android.content.Context
-import android.net.ConnectivityManager
 import lisa.owusu.tellmeaboutmycountry.models.Country
 import lisa.owusu.tellmeaboutmycountry.utils.Cache
 import lisa.owusu.tellmeaboutmycountry.utils.InternetCheck
 import lisa.owusu.tellmeaboutmycountry.utils.Requests
 import lisa.owusu.tellmeaboutmycountry.utils.RetrofitClientInstance
+import lisa.owusu.tellmeaboutmycountry.utils.Utils.Companion.checkForInternetConnectivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,19 +23,34 @@ class HomeInteractorImpl : HomeInteractor {
 
         listener.onBeforeRequest()
 
-        if (!checkForInternetConnectivity(context)) {
-            listener.onNetworkError()
-            return
-        }
-
         val cache = Cache.getInstance(context)
 
+        /**
+         * check to see if cache has the complete list of countries.
+         * If it has, we look for the country from that list instead
+         */
         if (cache.getCountries.isNotEmpty()) {
             getCountryFromLocalCache(name, context, listener)
             return
         }
 
+        /**
+         * Since there is no data in cache we have to check for internet availability
+         * by checking if network hardware is turned on and connected
+         * before getting the list of countries from the internet.
+         * If internet is not available display network error
+         */
+        if (!checkForInternetConnectivity(context)) {
+            listener.onNetworkError()
+            return
+        }
 
+
+        /**
+         * This Method checks for cases where the network hardware is
+         * connected but has no internet. It makes sure there is an active internet
+         * connection before countries list request is made
+         */
         try {
             InternetCheck(object : InternetCheck.Consumer {
 
@@ -92,7 +107,7 @@ class HomeInteractorImpl : HomeInteractor {
             return
         }
         for (country in cache.getCountries) {
-            if (country.name?.startsWith(name, true)!!) {
+            if (country.name?.contains(name, true)!!) {
                 countries.add(country)
             }
         }
@@ -154,16 +169,6 @@ class HomeInteractorImpl : HomeInteractor {
         cache.storeCountries(countries)
     }
 
-    override fun checkForInternetConnectivity(context: Context): Boolean {
-
-        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = manager.activeNetworkInfo
-        var isAvailable = false
-        if (networkInfo != null && networkInfo.isConnected && networkInfo.isAvailable) {
-            isAvailable = true
-        }
-        return isAvailable
-    }
 
 
 }
