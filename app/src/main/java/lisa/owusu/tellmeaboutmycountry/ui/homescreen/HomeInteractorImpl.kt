@@ -119,8 +119,6 @@ class HomeInteractorImpl : HomeInteractor {
             return
         }
 
-
-
         try {
             InternetCheck(object : InternetCheck.Consumer {
 

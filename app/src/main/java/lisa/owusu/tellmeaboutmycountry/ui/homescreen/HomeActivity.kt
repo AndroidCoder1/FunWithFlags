@@ -46,6 +46,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     private var textViewLanguage: TextView?  = null
     private var imageViewFlag : ImageView?  = null
     private var bottomViewLayout : LinearLayout? = null
+    private var timeLayout : LinearLayout? = null
     private var oopsLayout : LinearLayout? = null
     private var sheetBehavior : BottomSheetBehavior<View>? = null
     private var searchView: SearchView? = null
@@ -81,6 +82,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         progressBar = findViewById(R.id.progressBar)
         imageViewFlag = findViewById(R.id.iv_country_flag)
         bottomViewLayout = findViewById(R.id.contentLayout)
+        timeLayout = findViewById(R.id.timeLayout)
         oopsLayout = findViewById(R.id.oopsContainer)
         textViewError = findViewById(R.id.tv_error)
         textViewTime = findViewById(R.id.tv_time)
@@ -203,7 +205,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         textViewCallingCode?.text = ""
         textViewCapital?.text= ""
         textViewLanguage?.text = ""
-        textViewTime?.text = ""
+        timeLayout?.visibility = View.GONE
         imageViewFlag?.visibility = View.GONE
 
     }
@@ -217,11 +219,13 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         hideInternetConnectivityError()
 
         imageViewFlag?.visibility = View.VISIBLE
+        timeLayout?.visibility = View.VISIBLE
+
         val imageUrl = String.format(Constants.IMAGE_BASE_URL, country?.alpha2Code?.toLowerCase())
         Picasso.get().load(imageUrl).into(imageViewFlag)
         textViewCapital?.text= Utils.fromHtml(getString(R.string.capitalFormat, country?.capital))
 
-        textViewTime?.text = Utils.fromHtml(getString(R.string.timeFormat, country?.name, Utils.getTimeBasedOnTimeZone(country?.timezones?.get(0))))
+        textViewTime?.text = Utils.fromHtml(getString(R.string.timeFormat, Utils.getTimeBasedOnTimeZone(country?.timezones?.get(0))))
         textViewCountryName?.text = country?.name
 
         val currencies = Utils.generateStringsFromList(country?.currencies as ArrayList<Any>)
@@ -249,17 +253,22 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     }
 
     override fun setSearchViewAdapter(data: List<Country>?) {
-        countries = data
-        dataAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, data)
-        searchAutoComplete?.setOnClickListener(this)
-        searchAutoComplete?.setAdapter(dataAdapter)
-        dataAdapter?.notifyDataSetChanged()
-        searchAutoComplete?.showDropDown()
+        searchAutoComplete?.post {
+            countries = data
+            dataAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, data)
+            searchAutoComplete?.setOnClickListener(this)
+            searchAutoComplete?.setAdapter(dataAdapter)
+            dataAdapter?.notifyDataSetChanged()
+            searchAutoComplete?.showDropDown()
+        }
+
     }
 
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        presenter?.onItemClicked(countries?.get(position))
+        view?.post {
+            presenter?.onItemClicked(countries?.get(position))
+        }
     }
 
     override fun navigateToMaps(latLngString: String) {

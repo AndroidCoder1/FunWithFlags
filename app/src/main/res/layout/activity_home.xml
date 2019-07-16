@@ -53,17 +53,33 @@
               android:layout_gravity="center|top"
               android:id="@+id/progressBar"/>
 
-      <TextView
-              android:layout_width="match_parent"
+      <LinearLayout
+              android:id="@+id/timeLayout"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textColor="#CC0A4450"
               android:layout_gravity="center"
               android:gravity="center"
-              android:textSize="@dimen/details_text_size"
               android:layout_marginBottom="130dp"
-              android:text="Time\n23:14pm"
-              style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-              android:id="@+id/tv_time"/>
+              android:orientation="horizontal">
+
+               <com.airbnb.lottie.LottieAnimationView
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:layout_marginRight="15dp"
+                       app:lottie_autoPlay="true"
+                       app:lottie_loop="true"
+                       app:lottie_fileName="clock.json"/>
+
+               <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:textColor="#CC0A4450"
+                       android:textSize="@dimen/details_text_size"
+                       style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+                       android:id="@+id/tv_time"/>
+
+      </LinearLayout>
+
 
 
    </FrameLayout>

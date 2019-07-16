@@ -32,6 +32,8 @@ class HomePresenterImpl(homeView: HomeView, homeInteractor: HomeInteractor) : Ho
                 homeView?.hideProgress()
                 if(countries != null)
                     homeView?.setSearchViewAdapter(countries)
+                else
+                    homeView?.setSearchViewAdapter(ArrayList())
             }
 
             override fun onNullResponse() {

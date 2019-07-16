@@ -23,7 +23,7 @@ class Utils {
          */
         fun getTimeBasedOnTimeZone(timezoneStr: String?): String {
 
-            val pattern = "EEE dd-MMM-yyyy hh:mm:ss a"
+            val pattern = "EEE, dd-MMM-yyyy hh:mm:ss a"
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
                 val zoneId = ZoneId.of(timezoneStr)
