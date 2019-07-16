@@ -17,7 +17,6 @@ class GetAllCountriesService : IntentService("GetCountriesIntentService") {
 
     override fun onHandleIntent(intent: Intent?) {
         if (!Utils.checkForInternetConnectivity(this)) {
-            println(">>>>>>>>network hardware turned off")
             return
         }
         try {
@@ -25,7 +24,6 @@ class GetAllCountriesService : IntentService("GetCountriesIntentService") {
 
                 override fun accept(internet: Boolean?) {
                     if (internet == false) {
-                        println(">>>>>>>>>>>no internet")
                         return
                     }
 
@@ -37,14 +35,12 @@ class GetAllCountriesService : IntentService("GetCountriesIntentService") {
 
                     call?.enqueue(object : Callback<List<Country>> {
                         override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-                            println(">>>>>>>>>>failure")
                             return
                         }
 
                         override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
                             println(response.body())
                             if (response.body() != null){
-                                println(">>>>>>>>>>>saving instance")
                                 Cache.getInstance(this@GetAllCountriesService).storeCountries(response.body())
                             }
                         }
@@ -53,7 +49,6 @@ class GetAllCountriesService : IntentService("GetCountriesIntentService") {
             })
         } catch (e: Exception) {
             e.printStackTrace()
-            println(">>>>>>>>print exception in service")
             return
         }
     }
