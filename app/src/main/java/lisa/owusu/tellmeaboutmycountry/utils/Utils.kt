@@ -8,7 +8,6 @@ import android.text.Spanned
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 
 /**
  * Utils class is a helper class with helper methods
@@ -23,8 +22,6 @@ class Utils {
          * @param timezoneStr String of the timezone
          */
         fun getTimeBasedOnTimeZone(timezoneStr: String?): String {
-
-            println(Calendar.getInstance().timeZone.id)
 
             val pattern = "EEE dd-MMM-yyyy hh:mm:ss a"
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

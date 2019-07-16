@@ -250,12 +250,11 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
 
     override fun setSearchViewAdapter(data: List<Country>?) {
         countries = data
-        println("in set search adapter>>>${data.toString()}")
         dataAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, data)
         searchAutoComplete?.setOnClickListener(this)
         searchAutoComplete?.setAdapter(dataAdapter)
-        searchAutoComplete?.showDropDown()
         dataAdapter?.notifyDataSetChanged()
+        searchAutoComplete?.showDropDown()
     }
 
 

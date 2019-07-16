@@ -31,15 +31,12 @@ class GetAllCountriesService : IntentService("GetCountriesIntentService") {
 
                     val call = service?.getCountries(Country.getMemberNames()) ?: return
 
-                    println(call?.request()?.url())
-
                     call?.enqueue(object : Callback<List<Country>> {
                         override fun onFailure(call: Call<List<Country>>, t: Throwable) {
                             return
                         }
 
                         override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                            println(response.body())
                             if (response.body() != null){
                                 Cache.getInstance(this@GetAllCountriesService).storeCountries(response.body())
                             }

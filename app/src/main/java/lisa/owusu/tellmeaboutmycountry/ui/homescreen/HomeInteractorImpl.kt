@@ -70,8 +70,6 @@ class HomeInteractorImpl : HomeInteractor {
 
                     } else {
 
-                        println(call?.request()?.url())
-
                         call?.enqueue(object : Callback<List<Country>> {
 
                             override fun onFailure(call: Call<List<Country>>, t: Throwable) {
@@ -79,7 +77,6 @@ class HomeInteractorImpl : HomeInteractor {
                             }
 
                             override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                                println(response.body())
                                 if (response.body() == null) {
                                     listener.onNullResponse()
                                     return
@@ -140,19 +137,15 @@ class HomeInteractorImpl : HomeInteractor {
                     if (call == null) {
                         listener.onNullResponse()
                     }
-                    println(call?.request()?.url())
-
                     call?.enqueue(object : Callback<List<Country>> {
                         override fun onFailure(call: Call<List<Country>>, t: Throwable) {
                             listener.onError()
                         }
 
                         override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
-                            println(response.body())
                             listener.onRequestSuccess(response.body())
                         }
                     })
-
                 }
             })
         } catch (e: Exception) {
