@@ -32,6 +32,10 @@
 
         <service android:name=".services.GetAllCountriesService"/>
 
+        <meta-data
+                android:name="io.fabric.ApiKey"
+                android:value="672b9432a50e84fa80823328f3091f4d9f779540" />
+
     </application>
 
 </manifest>

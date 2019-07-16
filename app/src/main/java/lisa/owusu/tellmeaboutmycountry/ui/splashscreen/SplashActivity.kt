@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import lisa.owusu.tellmeaboutmycountry.R
 import lisa.owusu.tellmeaboutmycountry.ui.homescreen.HomeActivity
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
+
+
 
 
 class SplashActivity : AppCompatActivity(), SplashView, Animator.AnimatorListener {
@@ -17,8 +21,8 @@ class SplashActivity : AppCompatActivity(), SplashView, Animator.AnimatorListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_splash)
-
         presenter = SplashPresenterImpl(this)
 
         lottieAvImage = findViewById(R.id.lottie_av_image)

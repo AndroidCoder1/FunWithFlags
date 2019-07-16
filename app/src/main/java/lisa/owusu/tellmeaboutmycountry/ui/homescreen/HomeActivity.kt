@@ -197,7 +197,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         hideProgress()
         hideOopsContainer()
         collapseBottomView()
-        hideKeyboard(this@HomeActivity)
+        //hideKeyboard(this@HomeActivity)
         hideOopsContainer()
         hideInternetConnectivityError()
         textViewCountryName?.text = ""
@@ -315,7 +315,6 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     override fun onResume() {
         super.onResume()
         startGetAllCountriesService(this)
-        searchAutoComplete?.post { hideKeyboard(this@HomeActivity) }
     }
 
     override fun onBackPressed() {

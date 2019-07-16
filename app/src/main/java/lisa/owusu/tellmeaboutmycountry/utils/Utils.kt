@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter
  * Utils class is a helper class with helper methods
  */
 class Utils {
+
     companion object {
 
         /**
@@ -22,8 +23,8 @@ class Utils {
          * @param timezoneStr String of the timezone
          */
         fun getTimeBasedOnTimeZone(timezoneStr: String?): String {
-
             val pattern = "EEE, dd-MMM-yyyy hh:mm:ss a"
+
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
                 val zoneId = ZoneId.of(timezoneStr)
@@ -77,7 +78,6 @@ class Utils {
          * @param context current activity context
          */
         fun checkForInternetConnectivity(context: Context): Boolean {
-
             val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = manager.activeNetworkInfo
             var isAvailable = false
