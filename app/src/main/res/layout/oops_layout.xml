@@ -29,8 +29,7 @@
             android:textSize="20sp"
             android:text="@string/error_loading_country_details"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="#ff353232"
-            android:fontFamily="@font/molengo"
+            android:textColor="@color/textColor"
             android:id="@+id/tv_error"/>
 
 </LinearLayout>

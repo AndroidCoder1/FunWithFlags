@@ -27,14 +27,14 @@
 
     <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:background="@color/blue">
 
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center|top"
-                android:layout_marginTop="?attr/actionBarSize"
-                android:background="@color/colorPrimary">
+                android:gravity="center|top">
 
             <include layout="@layout/oops_layout"/>
 
@@ -47,7 +47,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="8dp"
-                    android:background="@color/blue"
                     android:orientation="vertical">
 
 

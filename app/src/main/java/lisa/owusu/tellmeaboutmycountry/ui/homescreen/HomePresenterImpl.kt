@@ -43,6 +43,7 @@ class HomePresenterImpl(homeView: HomeView, homeInteractor: HomeInteractor) : Ho
 
             override fun onBeforeRequest() {
                 homeView?.showProgress()
+                homeView?.resetScreen()
                 homeView?.hideOopsContainer()
                 homeView?.hideInternetConnectivityError()
             }
