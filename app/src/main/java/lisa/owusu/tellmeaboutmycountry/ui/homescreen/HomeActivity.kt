@@ -23,6 +23,8 @@ import com.google.android.material.appbar.AppBarLayout
 import com.squareup.picasso.Picasso
 import lisa.owusu.tellmeaboutmycountry.R
 import lisa.owusu.tellmeaboutmycountry.models.Country
+import lisa.owusu.tellmeaboutmycountry.services.GetAllCountriesService
+import lisa.owusu.tellmeaboutmycountry.utils.Cache
 import lisa.owusu.tellmeaboutmycountry.utils.Constants
 import lisa.owusu.tellmeaboutmycountry.utils.Utils
 
@@ -287,9 +289,9 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
 
 
     override fun startGetAllCountriesService(context: Context) {
-//        if (Cache.getInstance(context).getCountries.isEmpty()) {
-//            val intent = Intent(context, GetAllCountriesService::class.java)
-//            context.startService(intent)
-//        }
+        if (Cache.getInstance(context).getCountries.isEmpty()) {
+            val intent = Intent(context, GetAllCountriesService::class.java)
+            context.startService(intent)
+        }
     }
 }
