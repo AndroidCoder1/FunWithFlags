@@ -1,196 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-   <com.google.android.material.appbar.AppBarLayout
-           android:id="@+id/app_bar_layout"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-      <androidx.appcompat.widget.Toolbar
-              android:id="@+id/tool_bar"
-              android:layout_width="match_parent"
-              app:title="Fun with flags"
-              android:theme="@style/AppTheme.SearchView"
-              app:titleTextColor="@color/black"
-              android:layout_height="?attr/actionBarSize"
-              app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tool_bar"
+                android:layout_width="match_parent"
+                app:title="Fun with flags"
+                android:theme="@style/AppTheme.SearchView"
+                app:titleTextColor="@color/black"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-   </com.google.android.material.appbar.AppBarLayout>
-
-
-   <!--This the interface sitting behind the backdrop and shown when it is collapsed-->
-   <FrameLayout
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:orientation="vertical"
-           android:gravity="center|top"
-           android:layout_marginTop="?attr/actionBarSize"
-           android:background="@color/colorPrimary"
-           android:padding="8dp">
-
-      <include layout="@layout/oops_layout" />
-
-      <ImageView
-              android:id="@+id/iv_country_flag"
-              android:layout_width="230dp"
-              android:layout_height="100dp"
-              android:layout_gravity="center|top"
-              android:src="@mipmap/cam"
-              android:contentDescription="@string/app_name"/>
-
-      <ProgressBar
-              style="?android:attr/progressBarStyle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="80dp"
-              android:layout_gravity="center|top"
-              android:id="@+id/progressBar"/>
-
-      <LinearLayout
-              android:id="@+id/timeLayout"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:gravity="center"
-              android:layout_marginBottom="130dp"
-              android:orientation="horizontal">
-
-               <com.airbnb.lottie.LottieAnimationView
-                       android:layout_width="30dp"
-                       android:layout_height="30dp"
-                       android:layout_marginRight="15dp"
-                       app:lottie_autoPlay="true"
-                       app:lottie_loop="true"
-                       app:lottie_fileName="clock.json"/>
-
-               <TextView
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:textColor="#CC0A4450"
-                       android:textSize="@dimen/details_text_size"
-                       style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-                       android:id="@+id/tv_time"/>
-
-      </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-   </FrameLayout>
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|top"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:background="@color/colorPrimary">
 
-   <!--This is the backdrop's content with a BottomSheetBehaviour applied to it-->
-   <LinearLayout
-           android:id="@+id/contentLayout"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="vertical"
-           app:behavior_peekHeight="60dp"
-           app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-      <!--This is the backdrop's header with a title and icon-->
-      <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:background="@drawable/header_background"
-              android:paddingLeft="14dp"
-              android:paddingRight="14dp"
-              android:paddingTop="14dp"
-              android:paddingBottom="8dp"
-              android:focusable="true">
-
-         <TextView
-                 android:id="@+id/tv_country_name"
-                 android:layout_width="0dp"
-                 android:layout_height="wrap_content"
-                 android:layout_weight="1"
-                 android:textColor="@color/white"
-                 android:gravity="center"
-                 android:maxLines="2"
-                 android:ellipsize="end"
-                 android:textSize="@dimen/large_text_size"
-                 style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-                 android:text="United States of America"/>
+            <include layout="@layout/oops_layout"/>
 
 
-      </LinearLayout>
-
-      <LinearLayout
-              android:id="@+id/country_details"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:gravity="center_horizontal"
-              android:paddingLeft="19dp"
-              android:paddingRight="19dp"
-              android:paddingBottom="15dp"
-              android:background="@color/blue">
+            <include layout="@layout/progress"/>
 
 
-         <TextView
-                 android:text="Capital City: Accra"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:textColor="@color/off_white"
-                 android:gravity="center"
-                 android:textSize="@dimen/details_text_size"
-                 android:layout_marginBottom="12dp"
-                 style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-                 android:id="@+id/tv_capital"/>
+            <LinearLayout
+                    android:id="@+id/contentLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:background="@color/blue"
+                    android:orientation="vertical">
 
-         <TextView
-                 android:text="  Calling Code: +233"
-                 android:layout_width="300dp"
-                 android:layout_height="wrap_content"
-                 android:textColor="#FFFFFF"
-                 android:textSize="@dimen/details_text_size"
-                 style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-                 android:drawableLeft="@drawable/ic_call_48px"
-                 android:padding="10dp"
-                 android:background="@drawable/tv_map_background"
-                 android:layout_marginBottom="19dp"
-                 android:id="@+id/tv_calling_code"/>
 
-         <TextView
-                 android:text="@string/view_on_map"
-                 android:layout_width="300dp"
-                 android:layout_height="wrap_content"
-                 android:background="@drawable/tv_map_background"
-                 android:layout_gravity="center_horizontal"
-                 android:textColor="#F7F7F7"
-                 android:padding="10dp"
-                 android:drawableLeft="@drawable/ic_location_on_24px"
-                 style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-                 android:textSize="@dimen/details_text_size"
-                 android:layout_marginBottom="19dp"
-                 android:id="@+id/tv_view_on_map"/>
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/header_background"
+                        android:focusable="true">
 
-         <TextView
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:textColor="@color/off_white"
-                 android:textSize="@dimen/details_text_size"
-                 android:layout_marginBottom="12dp"
-                 style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-                 android:id="@+id/tv_currency"/>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/iv_country_flag"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginRight="12dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"/>
 
-         <TextView
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:textColor="@color/off_white"
-                 android:textSize="@dimen/details_text_size"
-                 style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
-                 android:layout_marginBottom="12dp"
-                 android:id="@+id/tv_languages"/>
-      </LinearLayout>
+                    <TextView
+                            android:id="@+id/tv_country_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/iv_country_flag"
+                            android:textColor="@color/white"
+                            android:layout_centerVertical="true"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            android:textSize="@dimen/large_text_size"
+                            style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+                            android:text="United States of America"
+                            android:layout_toEndOf="@+id/iv_country_flag"/>
 
-   </LinearLayout>
+
+                </RelativeLayout>
+
+                <include layout="@layout/country_time"/>
+
+                <TextView
+                        android:text="Capital City: Accra"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/off_white"
+                        android:gravity="center"
+                        android:textSize="@dimen/details_text_size"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="12dp"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+                        android:id="@+id/tv_capital"/>
+
+                <TextView
+                        android:text="  Calling Code: +233"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="@dimen/details_text_size"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+                        android:drawableLeft="@drawable/ic_call_48px"
+                        android:padding="10dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/tv_map_background"
+                        android:layout_marginBottom="19dp"
+                        android:id="@+id/tv_calling_code"/>
+
+                <TextView
+                        android:text="@string/view_on_map"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tv_map_background"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#F7F7F7"
+                        android:padding="10dp"
+                        android:drawableLeft="@drawable/ic_location_on_24px"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+                        android:textSize="@dimen/details_text_size"
+                        android:layout_marginBottom="19dp"
+                        android:id="@+id/tv_view_on_map"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/off_white"
+                        android:textSize="@dimen/details_text_size"
+                        android:layout_marginBottom="12dp"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+                        android:id="@+id/tv_currency"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/off_white"
+                        android:textSize="@dimen/details_text_size"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+                        android:layout_marginBottom="12dp"
+                        android:id="@+id/tv_languages"/>
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

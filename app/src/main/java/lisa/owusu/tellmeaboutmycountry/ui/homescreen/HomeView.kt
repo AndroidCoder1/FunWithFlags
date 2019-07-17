@@ -64,16 +64,6 @@ interface HomeView {
     fun displayCountryDetails(country: Country?)
 
     /**
-     * Called to expand BottomView
-     */
-    fun expandBottomView()
-
-    /**
-     * Called to collapse BottomView
-     */
-    fun collapseBottomView()
-
-    /**
      * Called to show toast message on screen
      * @param message Toast message
      */
@@ -92,10 +82,6 @@ interface HomeView {
      */
     fun navigateToMaps(latLngString: String)
 
-    /**
-     * Toggle Between showing and hiding BottomView
-     */
-    fun toggleBottomView()
 
     /**
      * Start Service to get all countries to save to cache

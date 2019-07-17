@@ -20,12 +20,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.squareup.picasso.Picasso
 import lisa.owusu.tellmeaboutmycountry.R
 import lisa.owusu.tellmeaboutmycountry.models.Country
-import lisa.owusu.tellmeaboutmycountry.services.GetAllCountriesService
-import lisa.owusu.tellmeaboutmycountry.utils.Cache
 import lisa.owusu.tellmeaboutmycountry.utils.Constants
 import lisa.owusu.tellmeaboutmycountry.utils.Utils
 
@@ -44,10 +41,9 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     private var textViewCurrency: TextView?  = null
     private var textViewLanguage: TextView?  = null
     private var imageViewFlag : ImageView?  = null
-    private var bottomViewLayout : LinearLayout? = null
+    private var contentLayout : LinearLayout? = null
     private var timeLayout : LinearLayout? = null
     private var oopsLayout : LinearLayout? = null
-    private var sheetBehavior : BottomSheetBehavior<View>? = null
     private var searchView: SearchView? = null
     private var searchAutoComplete: SearchView.SearchAutoComplete? = null
     private var presenter: HomePresenter? = null
@@ -75,7 +71,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         presenter = HomePresenterImpl(this, HomeInteractorImpl())
         progressBar = findViewById(R.id.progressBar)
         imageViewFlag = findViewById(R.id.iv_country_flag)
-        bottomViewLayout = findViewById(R.id.contentLayout)
+        contentLayout = findViewById(R.id.contentLayout)
         timeLayout = findViewById(R.id.timeLayout)
         oopsLayout = findViewById(R.id.oopsContainer)
         textViewError = findViewById(R.id.tv_error)
@@ -87,14 +83,8 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         textViewCurrency = findViewById(R.id.tv_currency)
         textViewLanguage = findViewById(R.id.tv_languages)
 
-        sheetBehavior = BottomSheetBehavior.from(bottomViewLayout)
-        sheetBehavior?.isFitToContents = true
-        sheetBehavior?.isHideable = false
-        sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-
 
         textViewViewOnMap?.setOnClickListener(this)
-        bottomViewLayout?.setOnClickListener(this)
 
         /**
          * Clearing all Default Text and Images in the layout
@@ -190,8 +180,6 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     override fun resetScreen() {
         hideProgress()
         hideOopsContainer()
-        collapseBottomView()
-        //hideKeyboard(this@HomeActivity)
         hideOopsContainer()
         hideInternetConnectivityError()
         textViewCountryName?.text = ""
@@ -199,21 +187,18 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         textViewCallingCode?.text = ""
         textViewCapital?.text= ""
         textViewLanguage?.text = ""
-        timeLayout?.visibility = View.GONE
-        imageViewFlag?.visibility = View.GONE
+        contentLayout?.visibility = View.GONE
 
     }
 
     override fun displayCountryDetails(country: Country?) {
 
         currentCountry = country
-        expandBottomView()
         hideKeyboard(this@HomeActivity)
         hideOopsContainer()
         hideInternetConnectivityError()
 
-        imageViewFlag?.visibility = View.VISIBLE
-        timeLayout?.visibility = View.VISIBLE
+        contentLayout?.visibility = View.VISIBLE
 
         val imageUrl = String.format(Constants.IMAGE_BASE_URL, country?.alpha2Code?.toLowerCase())
         Picasso.get().load(imageUrl).placeholder(android.R.drawable.progress_indeterminate_horizontal).error(R.mipmap.error).into(imageViewFlag)
@@ -236,14 +221,6 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
 
     override fun changeErrorText(text: String) {
         textViewError?.text = text
-    }
-
-    override fun expandBottomView() {
-        sheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    override fun collapseBottomView() {
-        sheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     override fun setSearchViewAdapter(data: List<Country>?) {
@@ -278,10 +255,8 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
     }
 
     override fun onClick(v: View?) {
-        when {
-            v?.id == R.id.contentLayout -> toggleBottomView()
-
-            v is SearchView.SearchAutoComplete -> {
+        when (v) {
+            is SearchView.SearchAutoComplete -> {
                 if(countries != null){
                     if (countries!!.count() > 0) {
                         if (searchAutoComplete?.text.toString() != "") {
@@ -291,7 +266,6 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
                     }
                 }
             }
-
             else -> presenter?.onNavigateToMapsClicked(currentCountry)
         }
     }
@@ -311,27 +285,11 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         startGetAllCountriesService(this)
     }
 
-    override fun onBackPressed() {
-        if (sheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED) {
-            hideKeyboard(this)
-            toggleBottomView()
-        } else
-            super.onBackPressed()
-
-    }
-
-    override fun toggleBottomView() {
-        if(sheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED){
-            collapseBottomView()
-        }else{
-            expandBottomView()
-        }
-    }
 
     override fun startGetAllCountriesService(context: Context) {
-        if (Cache.getInstance(context).getCountries.isEmpty()) {
-            val intent = Intent(context, GetAllCountriesService::class.java)
-            context.startService(intent)
-        }
+//        if (Cache.getInstance(context).getCountries.isEmpty()) {
+//            val intent = Intent(context, GetAllCountriesService::class.java)
+//            context.startService(intent)
+//        }
     }
 }
