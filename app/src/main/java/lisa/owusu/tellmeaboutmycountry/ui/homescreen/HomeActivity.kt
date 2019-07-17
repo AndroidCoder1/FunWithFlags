@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -72,11 +71,6 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBarLayout?.outlineProvider = null
         }
-
-        /**
-         * Trying to hide the keyboard when the app is created
-         */
-        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
         presenter = HomePresenterImpl(this, HomeInteractorImpl())
         progressBar = findViewById(R.id.progressBar)
@@ -222,7 +216,7 @@ class HomeActivity : AppCompatActivity(), HomeView, AdapterView.OnItemClickListe
         timeLayout?.visibility = View.VISIBLE
 
         val imageUrl = String.format(Constants.IMAGE_BASE_URL, country?.alpha2Code?.toLowerCase())
-        Picasso.get().load(imageUrl).into(imageViewFlag)
+        Picasso.get().load(imageUrl).placeholder(android.R.drawable.progress_indeterminate_horizontal).error(R.mipmap.error).into(imageViewFlag)
         textViewCapital?.text= Utils.fromHtml(getString(R.string.capitalFormat, country?.capital))
 
         textViewTime?.text = Utils.fromHtml(getString(R.string.timeFormat, Utils.getTimeBasedOnTimeZone(country?.timezones?.get(0))))
